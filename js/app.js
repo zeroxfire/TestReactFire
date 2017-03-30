@@ -16,8 +16,9 @@ var converter = new Showdown.converter();
 
 var LoginFrame = React.createClass({
   render: function() {
-    return  <div>
+    return  <div>{console.log(this.props.user)}
               <p>Hi, {this.props.user!=null ? this.props.user.displayName : 'Annonymous'}!</p>
+              <img src={this.props.user!=null ? this.props.user.photoURL : ''}/>
               <button onClick={this.props.loginWithFacebook}>Login with Facebook</button><button onClick={this.props.logOut}>Log Out</button>
             </div>;
     }
@@ -76,7 +77,7 @@ var WaitQueueApp = React.createClass({
   },
 
   onChange: function(e) {
-    this.setState({text: e.target.value, user: e.target.user});
+    this.setState({text: e.target.value});
   },
 
   triggerStatusItem1: function(key) {
@@ -98,6 +99,7 @@ var WaitQueueApp = React.createClass({
     firebase.auth().signInWithPopup(provider).then(function(result) {
       var token = result.credential.accessToken;
       this.setState({user: result.user});
+      cookie.save('user', result.user, { path: '/' });
     }.bind(this));
   },
 
